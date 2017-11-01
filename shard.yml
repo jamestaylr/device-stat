@@ -1,0 +1,10 @@
+name: aes
+version: 0.1.0
+
+authors:
+  - James Taylor <jamestaylr@gmail.com>
+
+description: |
+    Utility to monitor and report system statistics across machines
+
+license: MIT
