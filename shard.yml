@@ -1,4 +1,4 @@
-name: aes
+name: dstat
 version: 0.1.0
 
 authors:
@@ -6,5 +6,10 @@ authors:
 
 description: |
     Utility to monitor and report system statistics across machines
+
+dependencies:
+  toml:
+    github: manastech/crystal-toml
+    branch: master
 
 license: MIT
