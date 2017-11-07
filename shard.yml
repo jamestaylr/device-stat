@@ -11,5 +11,7 @@ dependencies:
   toml:
     github: manastech/crystal-toml
     branch: master
+  pg:
+    github: will/crystal-pg
 
 license: MIT
