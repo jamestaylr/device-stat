@@ -7,6 +7,7 @@ module DStat
       result = {} of String => Float64
       target = Time.now - 1.hours
       config = Utils.config["database"].as(Hash)
+      daemon = Utils.config["daemon"].as(Hash)
 
       connection = [
         "postgres://#{config["user"]}:#{config["password"]}",
@@ -22,6 +23,7 @@ module DStat
           query = [
             "SELECT avg(value) FROM metrics",
             "WHERE datetime > '#{target}' AND type='#{type}'",
+            "AND hostname=#{daemon["hostname"]}",
           ].join(" ")
 
           average = db.query_one(query, as: PG::Numeric).to_f

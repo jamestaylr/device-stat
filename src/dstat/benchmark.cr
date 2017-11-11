@@ -6,6 +6,7 @@ module DStat
     def run
       now = Time.now
       config = Utils.config["database"].as(Hash)
+      daemon = Utils.config["daemon"].as(Hash)
 
       connection = [
         "postgres://#{config["user"]}:#{config["password"]}",
@@ -19,10 +20,10 @@ module DStat
           {"disk", get_disk},
         ].each do |type, value|
           query = [
-            "INSERT INTO metrics (datetime, type, value)",
-            "VALUES ($1, $2, $3)",
-          ].join
-          db.exec query, now, type, value
+            "INSERT INTO metrics (datetime, type, value, hostname)",
+            "VALUES ($1, $2, $3, $4)",
+          ].join(" ")
+          db.exec query, now, type, value, daemon["hostname"]
         end
       end
     end
