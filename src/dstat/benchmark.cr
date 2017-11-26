@@ -10,7 +10,7 @@ module DStat
 
       connection = [
         "postgres://#{config["user"]}:#{config["password"]}",
-        "@localhost/stats",
+        "@#{config["host"]}/stats",
       ].join
 
       DB.open connection do |db|
