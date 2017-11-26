@@ -1,0 +1,9 @@
+[daemon]
+port = 2180
+ips = []
+hostname = "capstone2"
+
+[database]
+user = "capstone2"
+password = "password"
+host = "localhost"
