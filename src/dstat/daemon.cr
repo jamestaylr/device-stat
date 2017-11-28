@@ -13,8 +13,8 @@ module DStat
       DB.open connection
     end
 
-    private def query_host(hostname)
-      result = {} of String => Float64
+    def query_host(hostname)
+      result = {} of String => Hash(String, Float64)
       target = Time.now - 1.hours
       config = Utils.config["database"].as(Hash)
 
@@ -28,20 +28,30 @@ module DStat
         "memory",
         "disk",
       ].each do |type|
-        query = [
+        average = DStat::Daemon.database.query_one([
           "SELECT avg(value) FROM metrics",
           "WHERE datetime > '#{target}' AND type='#{type}'",
           "AND hostname='#{hostname}'",
-        ].join(" ")
+        ].join(" "),
+          as: PG::Numeric).to_f
 
-        average = DStat::Daemon.database.query_one(query, as: PG::Numeric).to_f
-        result[type] = average.round(2)
+        const = DStat::Daemon.database.query_one([
+          "SELECT value FROM constants",
+		"WHERE type='#{type}'",
+          "AND hostname='#{hostname}'",
+        ].join(" "),
+          as: PG::Numeric).to_f
+
+        result[type] = {
+          "expected" => average.round(2),
+          "constant" => const.round(2),
+        }
       end
       result
     end
 
     def query_all
-      result = {} of String => Hash(String, Float64)
+      result = {} of String => Hash(String, Hash(String, Float64))
       ["capstone0", "capstone1", "capstone2"].each do |h|
         result[h] = query_host(h)
       end
