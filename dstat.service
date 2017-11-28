@@ -1,0 +1,11 @@
+[Unit]
+Description=system statistics reporting
+
+[Service]
+Restart=always
+RestartSec=30
+User=capstone2
+ExecStart=/usr/local/dstat/dstat -d
+
+[Install]
+WantedBy=multi-user.target
