@@ -45,7 +45,7 @@ module DStat
 
         const = DStat::Daemon.database.query_one([
           "SELECT value FROM constants",
-		"WHERE type='#{type}'",
+          "WHERE type='#{type}'",
           "AND hostname='#{hostname}'",
         ].join(" "),
           as: PG::Numeric).to_f
@@ -69,7 +69,7 @@ module DStat
     def run
       config = Utils.config["daemon"].as(Hash)
       port = config["port"].as(Int64).to_i32
-      server = HTTP::Server.new(port) do |context|
+      server = HTTP::Server.new("0.0.0.0", port) do |context|
         context.response.content_type = "text/plain"
         context.response.print query_all.to_json
       end
