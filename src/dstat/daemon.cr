@@ -3,22 +3,18 @@ require "http/server"
 
 module DStat
   class Daemon
-    @@database = uninitialized DB::Database
-    @@database_init = false
+    @@database : DB::Database?
 
-    def self.database : DB::Database
-      if !@@database_init
+    def self.database
+      @@database ||= begin
         config = Utils.config["database"].as(Hash)
         connection = [
           "postgres://#{config["user"]}:#{config["password"]}",
           "@localhost/stats",
         ].join
 
-        @@database = DB.open connection
-        @@database_init = true
+        DB.open connection
       end
-
-      @@database
     end
 
     def query_host(hostname)
