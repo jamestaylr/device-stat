@@ -42,3 +42,12 @@ Should be configured to run benchmarking (`dstat -r`) every minute:
 ```text
 * * * * * /usr/local/dstat/dstat -r
 ```
+
+## SystemD Configuration
+
+Move the service unit file, `dstat.service` into `/etc/systemd/system` (altering the `user` option as appropriate). Then the web service can be interacted with using the expected `service` commands:
+```bash
+sudo service dstat status
+```
+
+If the unit file is changed on disk, run: `systemctl daemon-reload` as `root`.
